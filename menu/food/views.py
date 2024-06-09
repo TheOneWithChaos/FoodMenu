@@ -1,9 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Item
-from django.http import HttpResponse
-from django.template import loader
 from .forms import ItemForm
-from django.contrib.auth import authenticate, login, logout
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -89,6 +86,3 @@ def delete_item(request, item_id):
     
     return render(request, 'delete_item.html', {'item': item})
     
-def logout_user(request):
-    logout(request)
-    return render(request, 'logout.html')
