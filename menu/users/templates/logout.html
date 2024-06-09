@@ -1,1 +1,17 @@
-<h1>You have been logged out</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="5;url={% url 'food:index' %}">
+    <title>Logged Out</title>
+    <script>
+        setTimeout(function(){
+            window.location.href = "{% url 'food:index' %}";
+        }, 5000);
+    </script>
+</head>
+<body>
+    <h1>You have been logged out</h1>
+    <p>You will be redirected to the main page in 5 seconds. If not, click <a href="{% url 'food:index' %}">here</a>.</p>
+</body>
+</html>
