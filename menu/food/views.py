@@ -8,6 +8,9 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 # Create your views here.
 
 # def index(request):
@@ -57,6 +60,7 @@ class FoodDetail(DetailView):
     
 #     return render(request, 'item_form.html', {'form': form})
 
+@method_decorator(login_required, name='dispatch')
 class CreateItem(CreateView):
     model = Item
     fields = ['name', 'description', 'price', 'image']
