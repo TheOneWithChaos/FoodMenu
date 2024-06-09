@@ -63,7 +63,7 @@ class CreateItem(CreateView):
     template_name = 'item_form.html'
     
     def form_valid(self, form):
-        form.instance.user_name = self.request.user 
+        form.instance.user = self.request.user
         return super().form_valid(form)
 
 def update_item(request, item_id):
