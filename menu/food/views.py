@@ -7,19 +7,33 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.db.models import Q
 # Create your views here.
 
-def index(request):
-    list= Item.objects.all()
-    context = {
-        'list': list,
-    }
-    return render(request, 'index.html', context)
+# def index(request):
+#     list= Item.objects.all()
+#     context = {
+#         'list': list,
+#     }
+#     return render(request, 'index.html', context)
 
 class IndexClassView(ListView):
     model = Item
     template_name = 'index.html'
     context_object_name = 'list'
+    paginate_by = 2
+    
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Item.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+        else:
+            return Item.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q', '')
+        return context
 
 # def detail(request, item_id):
 #     item = Item.objects.get(pk=item_id)
@@ -33,24 +47,24 @@ class FoodDetail(DetailView):
     template_name = 'detail.html'
     
 
-def add_item(request):
-    form = ItemForm(request.POST or None)
+# def add_item(request):
+#     form = ItemForm(request.POST or None) 
     
-    if form.is_valid():
-        form.save()
-        form = ItemForm() # Clear the form after saving
-        return redirect('food:index')
+#     if form.is_valid():
+#         form.save()
+#         form = ItemForm() # Clear the form after saving
+#         return redirect('food:index')
     
-    return render(request, 'item_form.html', {'form': form})
+#     return render(request, 'item_form.html', {'form': form})
 
-# class CreateItem(CreateView):
-#     model = Item
-#     fields = ['name', 'description', 'price', 'image']
-#     template_name = 'item_form.html'
+class CreateItem(CreateView):
+    model = Item
+    fields = ['name', 'description', 'price', 'image']
+    template_name = 'item_form.html'
     
-#     def form_valid(self, form):
-#         form.instance.user_name = self.request.user
-#         return super().form_valid(form)
+    def form_valid(self, form):
+        form.instance.user_name = self.request.user 
+        return super().form_valid(form)
 
 def update_item(request, item_id):
     item = Item.objects.get(pk=item_id)
