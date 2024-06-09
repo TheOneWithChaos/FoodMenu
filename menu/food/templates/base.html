@@ -22,9 +22,6 @@
                     <li class="nav-item">
                         <a href="{% url 'food:create_item' %}" class="nav-link">Add Item</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{% url 'register' %}" class="nav-link">Register</a>
-                    </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a href="{% url 'logout' %}" class="nav-link">Logout</a>
